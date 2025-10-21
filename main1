@@ -1,0 +1,93 @@
+from sorting import *
+import logging
+import time
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(name)s %(asctime)s %(levelname)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[
+        logging.FileHandler("sorting.log", mode='w', encoding='utf-8'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+
+def test_algorithm(algo, name, data):
+    logger.info(f"=== {name} ===")
+    logger.info(f"Вход: {data}")
+
+    start = time.time()
+    try:
+        result = algo(data.copy(), enable_visualization=False) if name in ["Bubble Sort", "Selection Sort",
+                                                                           "Insertion Sort"] else algo(data.copy())
+        time_taken = time.time() - start
+
+        logger.info(f"Результат: {result}")
+        logger.info(f"Время: {time_taken:.6f}с\n")
+        return result, time_taken
+    except Exception as e:
+        logger.error(f"Ошибка в {name}: {e}", exc_info=True)
+        return None, 0
+
+
+def compare_algorithms():
+    logger.info("Сравнение алгоритмов")
+
+    test_cases = {
+        "Маленький": [5, 2, 1, 8, 4],
+        "Средний": [12, 11, 13, 5, 6, 7, 1, 15, 3, 4],
+        "Отсортированный": list(range(1, 11)),
+        "Обратный": list(range(10, 0, -1))
+    }
+
+    algorithms = {
+        "Bubble Sort": bubble_sort,
+        "Selection Sort": selection_sort,
+        "Insertion Sort": insertion_sort,
+        "Quick Sort": quick_sort,
+        "Merge Sort": merge_sort
+    }
+
+    for case_name, test_data in test_cases.items():
+        logger.info(f"\n--- {case_name} ---")
+        times = {}
+
+        for algo_name, algorithm in algorithms.items():
+            _, time_taken = test_algorithm(algorithm, algo_name, test_data)
+            times[algo_name] = time_taken
+
+        sorted_times = sorted(times.items(), key=lambda x: x[1])
+        for algo_name, t in sorted_times:
+            logger.info(f"  {algo_name}: {t:.6f}с")
+
+
+def demo_visualization():
+    data = [64, 34, 25, 12, 22, 11, 90]
+    bubble_sort(data.copy(), enable_visualization=True)
+    visualize_sorting("Bubble Sort")
+
+
+if __name__ == "__main__":
+    logger.info("Запуск программы")
+
+    test_data = [5, 2, 1, 8, 4]
+    logger.info(f"Тестовые данные: {test_data}")
+
+    try:
+        algorithms = [bubble_sort, selection_sort, insertion_sort, quick_sort, merge_sort]
+        names = ["Bubble Sort", "Selection Sort", "Insertion Sort", "Quick Sort", "Merge Sort"]
+
+        for algo, name in zip(algorithms, names):
+            result, _ = test_algorithm(algo, name, test_data)
+            logger.info(f"{name}: {result}")
+
+        print("Сортировки завершены! Лог: sorting.log")
+
+    except Exception as e:
+        logger.error(f"Ошибка: {e}", exc_info=True)
+    compare_algorithms()
+
+    logger.info("Программа завершена")
