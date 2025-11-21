@@ -1,0 +1,32 @@
+import pytest
+from sortting import *
+
+@pytest.fixture(params=[
+    [],
+    [1],
+    [3, 1, 2],
+    [5, 4, 3, 2, 1],
+    [1, 2, 3, 4, 5],
+    [1, 3, 2, 4, 5],  ])
+def test_data(request):
+    return request.param
+
+def test_bubble_sort(test_data):
+    expected = sorted(test_data)
+    bubble_sort(test_data)
+    assert test_data == expected
+
+def test_bubble_sort_f(test_data):
+    expected = sorted(test_data)
+    bubble_sort_f(test_data)
+    assert test_data == expected
+
+def test_choice_sort(test_data):
+    expected = sorted(test_data)
+    choice_sort(test_data)
+    assert test_data == expected
+
+def test_insert_sort(test_data):
+    expected = sorted(test_data)
+    insert_sort(test_data)
+    assert test_data == expected
