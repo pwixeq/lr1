@@ -1,0 +1,33 @@
+from main import *
+import pytest
+def test_comp():
+    assert comp(5, 6) == 180
+
+def test_sover():
+    assert sover(28) == True
+
+def test_ravn_triangle ():
+    assert ravn_triangle(10, 10, 10)
+
+def test_p_triangle ():
+    assert p_triangle(10, 5, 10) == 25
+
+def test_discriminant():
+    assert discriminant(10, 3, 6) == True
+
+
+def test_true():
+    assert True
+
+def test_false():
+    assert False
+
+def test_message():
+    assert False, "Тест не сдан"
+
+def test_pass():
+    pass
+
+def test_chet(chet):
+    chets = chet
+    assert comp3(chets) == [6,12,18,24,30,36,42,48,54]
